@@ -1,6 +1,8 @@
 def add(opcode, args):
     print("i")
 
+def add(opcode, args):
+    print("i")
 
 
 class Instruction:
@@ -23,8 +25,6 @@ class Instruction:
                 11: "1011",
                 12: "1111"
             }
-            print
-            switcher.get(argument, "Invalid month")
 
     def __init__(self, opcode, args):
         self.opcode = opcode
