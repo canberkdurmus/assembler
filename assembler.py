@@ -45,11 +45,14 @@ f.close()
 instruction_arr = []
 i = 0
 
+fp = open("output.hex", "w")
+
 for line in lines:
     line_arr = line.split()
     opcode = opcode_hex_dict[line_arr[0]]
     args = line_arr[1].split(',')
     instruction_arr.append(Instruction(opcode, args))
-    print(instruction_arr[i].hex)
+    # print(instruction_arr[i].hex)
+    fp.write(instruction_arr[i].hex + '\n')
     i += 1
-
+fp.close()
