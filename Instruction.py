@@ -41,22 +41,49 @@ def add_args(args):
     arg_str = register_hex_dic[args[0]]
     arg_str += register_hex_dic[args[1]]
     arg_str += register_hex_dic[args[2]]
+    arg_str += "0"
     return arg_str
 
 
 def addi_args(args):
     arg_str = str(register_hex_dic[args[0]])
     arg_str += register_hex_dic[args[1]]
-    arg_str += args[2]  # str(hex(args[2])[2:])
+    hex_str = hex(int(args[2]))[2:]  # str(hex(args[2])[2:])
+    if len(hex_str) == 1:
+        arg_str += '0'
+        arg_str += hex_str
+    elif len(hex_str) == 2:
+        arg_str += hex_str
+    else:
+        arg_str += '00'
     return arg_str
 
 
 def jump_offset(offset):
     if len(offset) == 1:
-        offset += "0"
-        offset += offset
+        offset = "000" + offset
+
     elif len(offset) == 2:
-        offset += offset
+        offset = "00" + offset
+
+    elif len(offset) == 3:
+        offset = "0" + offset
+    return offset
+
+
+def ld_offset(offset):
+    if len(offset) == 1:
+        offset = "00" + offset
+
+    elif len(offset) == 2:
+        offset = "0" + offset
+
+    return offset
+
+
+def branch_offset(offset):
+    if len(offset) == 1:
+        offset = "0" + offset
     return offset
 
 
@@ -81,15 +108,16 @@ class Instruction:
         elif opcode == "4" or opcode == "5" or opcode == "6" or opcode == "7" or opcode == "b" or opcode == "c" or opcode == "d" or opcode == "e" or opcode == "f":
             hex_str += opcode
             hex_str += addi_args(self.args)
+
         elif opcode == "8":
             hex_str += opcode
             offset = str(hex(int(self.args[0]))[2:])
-            print("jump offset is ", offset)
             hex_str += jump_offset(offset)
+
         elif opcode == "9" or opcode == "a":
             hex_str += opcode
             hex_str += register_hex_dic[self.args[0]]
             offset = str(hex(int(self.args[1]))[2:])
-            hex_str += jump_offset(offset)
+            hex_str += ld_offset(offset)
 
         self.hex = hex_str
